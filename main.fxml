@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox spacing="15" xmlns="http://javafx.com/javafx/17" 
+      xmlns:fx="http://javafx.com/fxml/1" 
+      fx:controller="Controller" 
+      style="-fx-background-color: #1a2332;">
+    
+    <padding>
+        <Insets top="15" right="15" bottom="15" left="15"/>
+    </padding>
+    
+    <HBox spacing="15" alignment="CENTER_LEFT">
+        <VBox>
+            <Label style="-fx-text-fill: #4fc3f7; -fx-font-size: 24px; -fx-font-weight: bold;">
+                Морской порт
+            </Label>
+            <Label text="Симуляция работы" style="-fx-text-fill: #78909c; -fx-font-size: 12px;"/>
+        </VBox>
+        
+        <Region HBox.hgrow="ALWAYS"/>
+        
+        <VBox alignment="CENTER_RIGHT">
+            <Label text="ДЕНЬ" style="-fx-text-fill: #78909c; -fx-font-size: 11px;"/>
+            <Label fx:id="dayLabel" text="0" style="-fx-text-fill: #ffd54f; -fx-font-size: 36px; -fx-font-weight: bold;"/>
+            <Label fx:id="dateLabel" text="2025-01-01" style="-fx-text-fill: #78909c; -fx-font-size: 13px;"/>
+        </VBox>
+    </HBox>
+    
+    <HBox spacing="10">
+        <Button text="Следующий день" onAction="#nextDay" 
+                style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-size: 16px; -fx-font-weight: bold; -fx-padding: 12 30; -fx-background-radius: 8; -fx-cursor: hand;"/>
+        <Button text="Добавить судно" onAction="#addShip" 
+                style="-fx-background-color: #2196F3; -fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold; -fx-padding: 12 20; -fx-background-radius: 8; -fx-cursor: hand;"/>
+        <Button text="Сброс" onAction="#resetSimulation" 
+                style="-fx-background-color: #f44336; -fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold; -fx-padding: 12 20; -fx-background-radius: 8; -fx-cursor: hand;"/>
+        
+        <Separator orientation="VERTICAL" style="-fx-background-color: #37474f;"/>
+        
+        <Label text="Фильтр:" style="-fx-text-fill: #78909c; -fx-font-size: 13px;"/>
+        <ComboBox fx:id="filterCombo" style="-fx-background-color: #263238; -fx-text-fill: white; -fx-font-size: 13px;"/>
+        <Button text="Применить" onAction="#applyFilter" 
+                style="-fx-background-color: #37474f; -fx-text-fill: white; -fx-font-size: 13px; -fx-padding: 8 15; -fx-background-radius: 5; -fx-cursor: hand;"/>
+    </HBox>
+    
+    <GridPane hgap="15" vgap="8" style="-fx-background-color: #263238; -fx-background-radius: 12; -fx-padding: 15;">
+        
+        <Label text="ШТРАФЫ" GridPane.rowIndex="0" GridPane.columnIndex="0" 
+               style="-fx-text-fill: #78909c; -fx-font-size: 11px;"/>
+        <Label fx:id="totalPenaltyLabel" text="0.00" GridPane.rowIndex="1" GridPane.columnIndex="0" 
+               style="-fx-text-fill: #ef5350; -fx-font-size: 28px; -fx-font-weight: bold;"/>
+        
+        <Label text="РАЗГРУЖЕНО" GridPane.rowIndex="0" GridPane.columnIndex="1" 
+               style="-fx-text-fill: #78909c; -fx-font-size: 11px;"/>
+        <Label fx:id="processedCountLabel" text="0" GridPane.rowIndex="1" GridPane.columnIndex="1" 
+               style="-fx-text-fill: #66bb6a; -fx-font-size: 28px; -fx-font-weight: bold;"/>
+        
+        <Label text="В ОЧЕРЕДИ" GridPane.rowIndex="0" GridPane.columnIndex="2" 
+               style="-fx-text-fill: #78909c; -fx-font-size: 11px;"/>
+        <Label fx:id="queueLengthLabel" text="0" GridPane.rowIndex="1" GridPane.columnIndex="2" 
+               style="-fx-text-fill: #ffa726; -fx-font-size: 28px; -fx-font-weight: bold;"/>
+        
+        <Label text="СР. ОЖИДАНИЕ" GridPane.rowIndex="0" GridPane.columnIndex="3" 
+               style="-fx-text-fill: #78909c; -fx-font-size: 11px;"/>
+        <Label fx:id="avgWaitTimeLabel" text="0.0" GridPane.rowIndex="1" GridPane.columnIndex="3" 
+               style="-fx-text-fill: #42a5f5; -fx-font-size: 28px; -fx-font-weight: bold;"/>
+        
+        <Label text="СР. РАЗГРУЗКА" GridPane.rowIndex="0" GridPane.columnIndex="4" 
+               style="-fx-text-fill: #78909c; -fx-font-size: 11px;"/>
+        <Label fx:id="avgUnloadTimeLabel" text="0.0" GridPane.rowIndex="1" GridPane.columnIndex="4" 
+               style="-fx-text-fill: #26c6da; -fx-font-size: 28px; -fx-font-weight: bold;"/>
+        
+        <Label text="СР. ОЧЕРЕДЬ" GridPane.rowIndex="0" GridPane.columnIndex="5" 
+               style="-fx-text-fill: #78909c; -fx-font-size: 11px;"/>
+        <Label fx:id="avgQueueLengthLabel" text="0.0" GridPane.rowIndex="1" GridPane.columnIndex="5" 
+               style="-fx-text-fill: #ab47bc; -fx-font-size: 28px; -fx-font-weight: bold;"/>
+        
+        <Label text="МАКС. ОЖИДАНИЕ" GridPane.rowIndex="0" GridPane.columnIndex="6" 
+               style="-fx-text-fill: #78909c; -fx-font-size: 11px;"/>
+        <Label fx:id="maxWaitTimeLabel" text="0.0" GridPane.rowIndex="1" GridPane.columnIndex="6" 
+               style="-fx-text-fill: #ef5350; -fx-font-size: 28px; -fx-font-weight: bold;"/>
+        
+        <Label text="МАКС. ЗАДЕРЖКА" GridPane.rowIndex="0" GridPane.columnIndex="7" 
+               style="-fx-text-fill: #78909c; -fx-font-size: 11px;"/>
+        <Label fx:id="maxUnloadDelayLabel" text="0.0" GridPane.rowIndex="1" GridPane.columnIndex="7" 
+               style="-fx-text-fill: #ef5350; -fx-font-size: 28px; -fx-font-weight: bold;"/>
+        
+        <Label text="КРАНЫ" GridPane.rowIndex="0" GridPane.columnIndex="8" 
+               style="-fx-text-fill: #78909c; -fx-font-size: 11px;"/>
+        <Label fx:id="busyCranesLabel" text="0/6" GridPane.rowIndex="1" GridPane.columnIndex="8" 
+               style="-fx-text-fill: #4fc3f7; -fx-font-size: 28px; -fx-font-weight: bold;"/>
+        
+        <Label text="ПОГОДА" GridPane.rowIndex="0" GridPane.columnIndex="9" 
+               style="-fx-text-fill: #78909c; -fx-font-size: 11px;"/>
+        <Label fx:id="weatherLabel" text="Хорошая" GridPane.rowIndex="1" GridPane.columnIndex="9" 
+               style="-fx-text-fill: #4fc3f7; -fx-font-size: 20px; -fx-font-weight: bold;"/>
+    </GridPane>
+    
+    <HBox spacing="10">
+        <VBox spacing="5" style="-fx-background-color: #263238; -fx-background-radius: 12; -fx-padding: 15; -fx-min-width: 400;">
+            <Label text="Схема порта" style="-fx-text-fill: #78909c; -fx-font-size: 13px; -fx-font-weight: bold;"/>
+            <GridPane hgap="10" vgap="10" fx:id="portLayout"/>
+            <Label text="Зеленый - работает, Оранжевый - погода влияет, Серый - свободен" 
+                   style="-fx-text-fill: #78909c; -fx-font-size: 11px; -fx-padding: 5 0 0 0;"/>
+        </VBox>
+        
+        <VBox spacing="5" style="-fx-background-color: #263238; -fx-background-radius: 12; -fx-padding: 15; -fx-min-width: 300;">
+            <Label text="События" style="-fx-text-fill: #78909c; -fx-font-size: 13px; -fx-font-weight: bold;"/>
+            <ListView fx:id="eventListView" style="-fx-background-color: #1a2332; -fx-text-fill: white; -fx-font-size: 13px;"/>
+        </VBox>
+    </HBox>
+    
+    <TabPane style="-fx-background-color: transparent;">
+        
+        <Tab text="Очередь ожидания" closable="false">
+            <TableView fx:id="waitingQueueTable" style="-fx-background-color: #1a2332;">
+                <columns>
+                    <TableColumn text="ID" fx:id="colWaitId" prefWidth="50"/>
+                    <TableColumn text="Судно" fx:id="colWaitName" prefWidth="140"/>
+                    <TableColumn text="Тип" fx:id="colWaitType" prefWidth="80"/>
+                    <TableColumn text="Груз" fx:id="colWaitCargo" prefWidth="90"/>
+                    <TableColumn text="Вес (т)" fx:id="colWaitWeight" prefWidth="80"/>
+                    <TableColumn text="В очереди" fx:id="colWaitDays" prefWidth="100"/>
+                    <TableColumn text="План. срок" fx:id="colWaitPlanned" prefWidth="90"/>
+                    <TableColumn text="Штраф" fx:id="colWaitPenalty" prefWidth="120"/>
+                    <TableColumn text="Статус" fx:id="colWaitStatus" prefWidth="100"/>
+                </columns>
+            </TableView>
+        </Tab>
+        
+        <Tab text="Разгруженные" closable="false">
+            <TableView fx:id="unloadedShipsTable" style="-fx-background-color: #1a2332;">
+                <columns>
+                    <TableColumn text="ID" fx:id="colDoneId" prefWidth="50"/>
+                    <TableColumn text="Судно" fx:id="colDoneName" prefWidth="140"/>
+                    <TableColumn text="Тип" fx:id="colDoneType" prefWidth="80"/>
+                    <TableColumn text="Груз" fx:id="colDoneCargo" prefWidth="90"/>
+                    <TableColumn text="Вес" fx:id="colDoneWeight" prefWidth="80"/>
+                    <TableColumn text="Ожидание" fx:id="colDoneWait" prefWidth="100"/>
+                    <TableColumn text="Разгрузка" fx:id="colDoneUnloadTime" prefWidth="100"/>
+                    <TableColumn text="Штраф" fx:id="colDonePenalty" prefWidth="120"/>
+                </columns>
+            </TableView>
+        </Tab>
+        
+        <Tab text="Статистика по типам" closable="false">
+            <TableView fx:id="statsTable" style="-fx-background-color: #1a2332;">
+                <columns>
+                    <TableColumn text="Тип груза" fx:id="colStatsType" prefWidth="200"/>
+                    <TableColumn text="Всего" fx:id="colStatsTotal" prefWidth="150"/>
+                    <TableColumn text="Разгружено" fx:id="colStatsUnloaded" prefWidth="150"/>
+                    <TableColumn text="В очереди" fx:id="colStatsWaiting" prefWidth="150"/>
+                    <TableColumn text="Ср. штраф" fx:id="colStatsPenalty" prefWidth="200"/>
+                </columns>
+            </TableView>
+        </Tab>
+    </TabPane>
+</VBox>
